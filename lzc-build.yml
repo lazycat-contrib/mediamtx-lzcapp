@@ -1,36 +1,4 @@
-project:
-  root: .
-  build_config: lzc-build.yml
-  package_file: package.yml
-  output: dist/application.lpk
-  target_arch: amd64
-update:
-  strategy: publish
-  allow_downgrade: false
-  version_source:
-    type: image
-    image: mediamtx
-build:
-  toolchains: []
-  run_buildscript: false
-images:
-  - id: mediamtx
-    target: service
-    service: mediamtx
-    source: bluenviron/mediamtx
-    channel: stable
-    sort: semver
-    tag_regex: '^v?[0-9]+[.][0-9]+[.][0-9]+$'
-    delivery:
-      mode: mirror
-      require_digest_match: true
-release:
-  use_github_release_notes: true
-  store_changelog_format: plain
-stores:
-  official:
-    enabled: false
-  private:
-    enabled: false
-    name: MediaMTX
-    skip_if_version_exists: true
+manifest: ./lzc-manifest.yml
+pkgout: ./dist
+icon: ./icon.png
+contentdir: ./content
