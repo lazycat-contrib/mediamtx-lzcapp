@@ -1,0 +1,50 @@
+application:
+  subdomain: mediamtx
+  multi_instance: false
+  # MediaMTX has no account system; the web console is kept behind the
+  # platform login gate (no public_path).
+  upstreams:
+    - location: /package-licenses/
+      backend: file:///lzcapp/pkg/content/licenses/
+    - location: /
+      backend: http://mediamtx:8888/
+  ingress:
+    - protocol: tcp
+      port: 8554
+      service: mediamtx
+    - protocol: tcp
+      port: 1935
+      service: mediamtx
+    - protocol: tcp
+      port: 8889
+      service: mediamtx
+    - protocol: udp
+      port: 8189
+      service: mediamtx
+
+services:
+  mediamtx:
+    # upstream: bluenviron/mediamtx:1.21.3
+    image: docker.1ms.run/bluenviron/mediamtx:1.21.3
+    environment:
+      - TZ=Asia/Shanghai
+
+usage: |
+  MediaMTX 是一个开箱即用的流媒体服务器，支持 RTSP / RTMP / WebRTC 收流，
+  并通过 HLS / WebRTC 对外播放，自带 Web 控制台。
+
+  使用方法：
+  1. 打开应用进入 Web 控制台，页面会列出当前所有流。
+  2. 推流：用 OBS / FFmpeg 把流推到本机 1935 端口（RTMP）或 8554 端口（RTSP），
+     例如：ffmpeg -re -i input.mp4 -c copy -f rtsp rtsp://<设备IP>:8554/mystream
+  3. 播放：Web 控制台里直接点开对应的流（HLS/WebRTC），
+     或用播放器拉 rtsp://<设备IP>:8554/mystream。
+
+  说明：
+  - Web 控制台与 HLS 播放走懒猫平台入口，由平台登录鉴权；
+    8554（RTSP）/ 1935（RTMP）/ 8889 / 8189（WebRTC）由服务直接监听、
+    不经平台入口转发，需在防火墙自行放行。MediaMTX 本身无账号体系，
+    上述端口默认不校验发布者身份，请勿把它们暴露到公网。
+  - 默认配置使用镜像内嵌 mediamtx.yml，未额外挂载配置文件；
+    录制功能默认关闭，数据不落盘。
+  - 未做实机验证：推流、拉流、Web 控制台操作均未在设备上实测。

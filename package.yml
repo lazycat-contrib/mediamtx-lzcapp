@@ -1,0 +1,18 @@
+package: community.lazycat.app.mediamtx
+name: MediaMTX
+version: 0.0.0
+description: "Ready-to-use media server: RTSP, RTMP, HLS and WebRTC ingest and playback with a built-in web console."
+min_os_version: "1.5.0"
+homepage: https://github.com/bluenviron/mediamtx
+author: bluenviron
+license: MIT
+permissions:
+  required:
+    - net.internet
+locales:
+  zh:
+    name: MediaMTX
+    description: "开箱即用的流媒体服务器：支持 RTSP/RTMP/HLS/WebRTC 推拉流，内置 Web 控制台。"
+  en:
+    name: MediaMTX
+    description: "Ready-to-use media server: RTSP, RTMP, HLS and WebRTC ingest and playback with a built-in web console."
